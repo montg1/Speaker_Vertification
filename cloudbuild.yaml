@@ -1,22 +1,29 @@
 # cloudbuild.yaml
 
-# Step 1: Skip unit tests and directly build Docker image
+# Step 1: Run unit tests
+- name: 'python:3.8'
+  id: Test
+  entrypoint: /bin/sh
+  args:
+    - '-c'
+    - 'pip install -r requirements.txt
+
+# Step 2: Build and push Docker image
 - name: 'gcr.io/cloud-builders/docker'
   id: Build
   args:
     - 'build'
     - '-t'
-    - 'gcr.io/agile-seeker-413310/fastapi-app:$BRANCH_NAME-$SHORT_SHA'
+    - 'gcr.io/$PROJECT_ID/fastapi-app:$BRANCH_NAME-$SHORT_SHA'
     - '.'
 
-# Step 2: Deploy to Cloud Run
+# Step 3: Deploy to Cloud Run
 - name: 'gcr.io/cloud-builders/gcloud'
   id: Deploy
   args:
     - 'run'
     - 'deploy'
     - 'fastapi-app'
-    - '--image=gcr.io/agile-seeker-413310/fastapi-app:$BRANCH_NAME-$SHORT_SHA'
+    - '--image=gcr.io/$PROJECT_ID/fastapi-app:$BRANCH_NAME-$SHORT_SHA'
     - '--platform=managed'
     - '--region=us-central1'
-
