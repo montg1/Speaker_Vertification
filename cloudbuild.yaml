@@ -23,7 +23,7 @@ steps:
   id: Push
   args:
   - 'push'
-  - 'gcr.io/$PROJECT_ID/$REPO_NAME:$BRANCH_NAME-$SHORT_SHA'
+  - 'gcr.io/$PROJECT_ID/speaker_vertification:$BRANCH_NAME-$SHORT_SHA'
 
 # Deploy image to Cloud Run Google Cloud 
 - name: 'gcr.io/cloud-builders/gcloud'
@@ -33,7 +33,7 @@ steps:
   - 'deploy'
   - 'fastapi-movies'
   - '--image'
-  - 'gcr.io/$PROJECT_ID/$REPO_NAME:$BRANCH_NAME-$SHORT_SHA'
+  - 'gcr.io/$PROJECT_ID/speaker_vertification:$BRANCH_NAME-$SHORT_SHA'
   - '--region'
   - asia-southeast1 
   - '--platform'
