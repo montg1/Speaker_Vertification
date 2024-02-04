@@ -31,7 +31,7 @@ def read_root():
 
 @app.get("/cal/{num1}/{num2}")
 def cal(num1: int, num2: int):
-    return {"result": num1 + num2}
+    return {"result": num1 ** num2}
 
 
 
