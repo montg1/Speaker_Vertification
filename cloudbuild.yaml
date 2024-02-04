@@ -6,7 +6,7 @@
   args:
     - 'build'
     - '-t'
-    - 'gcr.io/$PROJECT_ID/fastapi-app:$BRANCH_NAME-$SHORT_SHA'
+    - 'gcr.io/agile-seeker-413310/fastapi-app:$BRANCH_NAME-$SHORT_SHA'
     - '.'
 
 # Step 2: Deploy to Cloud Run
@@ -16,7 +16,7 @@
     - 'run'
     - 'deploy'
     - 'fastapi-app'
-    - '--image=gcr.io/$PROJECT_ID/fastapi-app:$BRANCH_NAME-$SHORT_SHA'
+    - '--image=gcr.io/agile-seeker-413310/fastapi-app:$BRANCH_NAME-$SHORT_SHA'
     - '--platform=managed'
     - '--region=us-central1'
 
