@@ -8,4 +8,4 @@ RUN apt-get update \
     && apt-get install gcc -y \
     && pip install --no-cache-dir -r requirements.txt \
     && rm -rf /var/lib/apt/lists/* 
-CMD ["python", "main.py"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
