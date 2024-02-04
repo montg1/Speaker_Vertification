@@ -27,16 +27,13 @@ class Item(BaseModel):
     price: float
     is_offer: Union[bool, None] = None
     
-    
-# Serve static files from the "static" directory
-app.mount("/static", StaticFiles(directory="C:\Speaker_Vertification\FastAPI\static"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
-
+#response index.html
 @app.get("/")
-def read_root():
-    # Assuming 'index.html' is in the same directory as this script
-    html_path = Path("C:\Speaker_Vertification\FastAPI\\template\index.html").parent / "index.html"
-    return FileResponse(html_path, media_type="text/html")
+async def read_index():
+    return FileResponse('static/index.html')
+
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
