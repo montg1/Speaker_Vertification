@@ -31,11 +31,11 @@ steps:
   args:
   - 'run'
   - 'deploy'
-  - 'fastapi-movies'
+  - 'speaker-verification'
   - '--image'
   - 'gcr.io/$PROJECT_ID/speaker_vertification:$BRANCH_NAME-$SHORT_SHA'
-  - '--region'
-  - asia-southeast1 
+  - '--region=asia-southeast1'
   - '--platform'
   - 'managed'
   - '--allow-unauthenticated'
+
