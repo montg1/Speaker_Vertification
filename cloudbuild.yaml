@@ -14,7 +14,7 @@ steps:
   args:
   - 'build'
   - '-t'
-  - 'gcr.io/$PROJECT_ID/$REPO_NAME:$BRANCH_NAME-$SHORT_SHA'
+  - 'gcr.io/$PROJECT_ID/speaker_vertification:$BRANCH_NAME-$SHORT_SHA'
   - '.'
   
 # This step pushes the image to Container Registry
