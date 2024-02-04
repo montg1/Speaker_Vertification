@@ -1,6 +1,6 @@
 steps:
 # This step runs the unit tests on the app
-- name: 'python:3.6-slim'
+- name: 'python:3.8.5'
   id: Test
   entrypoint: /bin/sh
   args:
