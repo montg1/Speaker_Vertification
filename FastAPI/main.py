@@ -29,10 +29,16 @@ class Item(BaseModel):
 def read_root():
     return {"Hello": "World"}
 
+@app.get("/cal/{num1}/{num2}")
+def cal(num1: int, num2: int):
+    return {"result": num1 + num2}
+
+
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
+
 
 
 @app.put("/items/{item_id}")
