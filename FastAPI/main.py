@@ -29,9 +29,13 @@ class Item(BaseModel):
 def read_root():
     return {"Hello": "World"}
 
-@app.get("/cal/{num1}/{num2}")
+@app.get("/power/{num1}/{num2}")
 def cal(num1: int, num2: int):
     return {"result": num1 ** num2}
+
+@app.get("/add/{num1}/{num2}")
+def cal(num1: int, num2: int):
+    return {"result": num1 + num2}
 
 
 
