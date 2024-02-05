@@ -12,7 +12,7 @@ app = FastAPI()
 # Serve the doc.html file
 @app.get("/", response_class=HTMLResponse)
 def get_docs():
-    with open("doc.html", "r") as file:
+    with open("..\FastAPI\doc.html", "r") as file:
         html_content = file.read()
     return HTMLResponse(content=html_content, status_code=200)
 
