@@ -4,10 +4,18 @@ from fastapi import FastAPI , UploadFile, HTTPException, File
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
+from pathlib import Path
 import os
 import io
 
 app = FastAPI()
+# Serve the doc.html file
+@app.get("/", response_class=HTMLResponse)
+def get_docs():
+    with open("doc.html", "r") as file:
+        html_content = file.read()
+    return HTMLResponse(content=html_content, status_code=200)
+
 
 # Allow all origins for testing purposes
 app.add_middleware(
@@ -24,47 +32,6 @@ class Item(BaseModel):
     price: float
     is_offer: Union[bool, None] = None
 
-
-@app.get("/", response_class=HTMLResponse)
-def get_homepage():
-    html_content = """
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>FastAPI Button</title>
-        <style>
-            body {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                margin: 0;
-                background-color: #f0f0f0;
-            }
-
-            button {
-                padding: 10px 20px;
-                background-color: #4CAF50;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                font-size: 16px;
-                cursor: pointer;
-            }
-
-            button:hover {
-                background-color: #45a049;
-            }
-        </style>
-    </head>
-    <body>
-        <button onclick="window.location.href='/docs'">Go to docs</button>
-    </body>
-    </html>
-    """
-    return HTMLResponse(content=html_content)
 
 @app.get("/power/{num1}/{num2}")
 def cal(num1: int, num2: int):
