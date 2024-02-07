@@ -92,6 +92,30 @@ const createRecordingButtons = () => {
   }
 };
 
+const uploadFiles = async () => {
+  for (let i = 0; i < recordings.length; i++) {
+    const formData = new FormData();
+    formData.append('file', recordings[i], `recording_${i}.wav`);
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        console.log(`File ${i+1} uploaded successfully`);
+      } else {
+        console.error(`Failed to upload file ${i+1}`);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+};
+
+
+
 document.getElementById('startRecording').addEventListener('click', startRecording);
 document.getElementById('stopRecording').addEventListener('click', stopRecording);
-
+document.getElementById('downloadFiles').addEventListener('click', uploadFiles);
