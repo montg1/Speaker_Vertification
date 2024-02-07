@@ -54,5 +54,6 @@ const convertAndSendToServer = async (blob) => {
 };
 
 
+
 document.getElementById('startRecording').addEventListener('click', startRecording);
 document.getElementById('stopRecording').addEventListener('click', stopRecording);

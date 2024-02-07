@@ -1,14 +1,16 @@
 from typing import Union
-
+from fastapi.staticfiles import StaticFiles
 from fastapi import FastAPI , UploadFile, HTTPException, File 
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from pathlib import Path
 import os
 import io
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 # Serve the doc.html file
 @app.get("/docc", response_class=HTMLResponse)
 def get_docs():
@@ -37,40 +39,65 @@ class Item(BaseModel):
 def get_homepage():
     html_content = """
     <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>FastAPI Button</title>
-        <style>
-            body {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                margin: 0;
-                background-color: #f0f0f0;
-            }
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI Buttons</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
 
-            button {
-                padding: 10px 20px;
-                background-color: #4CAF50;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                font-size: 16px;
-                cursor: pointer;
-            }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 10px; /* added some space between buttons */
+        }
 
-            button:hover {
-                background-color: #45a049;
-            }
-        </style>
-    </head>
-    <body>
-        <button onclick="window.location.href='/docs'">Go to docs</button>
-    </body>
-    </html>
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="window.location.href='/docs'">Go to docs</button>
+    <button onclick="window.location.href='/index'">Go to index</button>
+</body>
+</html>
+
+    """
+    return HTMLResponse(content=html_content)
+
+
+@app.get("/index", response_class=HTMLResponse)
+def get_homepage():
+    html_content = """
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Recorder</title>
+</head>
+<body>
+    <button id="startRecording">Start Recording</button>
+    <button id="stopRecording" disabled>Stop Recording</button>
+    <audio id="audioPlayer" controls></audio>
+
+    <script src="/scripts/app.js"></script>
+</body>
+</html>
     """
     return HTMLResponse(content=html_content)
 
