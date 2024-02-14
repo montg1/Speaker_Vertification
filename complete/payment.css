@@ -1,5 +1,20 @@
+/* Default styles */
 body {
-  background: #3B919D;
+  background-color: #3B919D;
+  background-image: url('wave.png');
+  background-attachment: fixed;
+  display: relative;
+  background: image opacity 50%;
+  /* Setting the background image */
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  /* Ensuring the background image does not repeat */
+  background-position: bottom;
+  /* Placing the background image at the bottom center */
+  width: auto;
+  height: 100vh;
+
 }
 
 .container {
@@ -112,10 +127,11 @@ body {
   text-align: center;
   color: #333;
   font-weight: bold;
-  .order-number-label {
-    font-size: 10px;
-    margin-bottom: 8px;
-  }
+}
+
+.order-details .order-number-label {
+  font-size: 10px;
+  margin-bottom: 8px;
 }
 
 .order-footer {
@@ -160,5 +176,44 @@ body {
   }
   100% {
     -ms-transform: translateY(0%);
+  }
+}
+
+/* Responsive styles */
+@media screen and (max-width: 480px) {
+  .container {
+    max-width: 100%;
+    margin: 10px;
+  }
+
+  .main-contents {
+    padding: 12px;
+  }
+
+  .paper {
+    margin: 0 6px;
+    margin-top: -6px;
+  }
+
+  .success-title {
+    font-size: 18px;
+  }
+
+  .success-description {
+    font-size: 8px;
+    line-height: 18px;
+  }
+
+  .order-details {
+    font-size: 14px;
+    .order-number-label {
+      font-size: 8px;
+      margin-bottom: 4px;
+    }
+  }
+
+  .order-footer {
+    font-size: 14px;
+    line-height: 16px;
   }
 }
