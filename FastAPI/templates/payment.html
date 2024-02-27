@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="payment.css">
+    <script src="https://unpkg.com/jsbarcode@latest/dist/JsBarcode.all.min.js"></script>
+    <script src="JsBarcode.all.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="printer-top"></div>
+          
+        <div class="paper-container">
+          <div class="printer-bottom"></div>
+      
+          <div class="paper">
+            <div class="main-contents">
+              <div class="success-icon">&#10004;</div>
+              <div class="success-title">
+                Verify Complete
+              </div>
+              <div class="success-description">
+                Thank you for completing the voice-verification process. 
+                <br />Your identity has been confirmed, and your security is ensured. 
+                <br />We appreciate your cooperation.
+              </div>
+              <div class="order-details">
+                <svg id="barcode"></svg>
+                <br />
+                <br />
+                <br />
+                <br />
+              </div>
+              <div class="order-footer">Thank you!</div>
+            </div>
+            <div class="jagged-edge"></div>
+          </div>
+        </div>
+      </div>
+</body>
+<script>
+    JsBarcode("#barcode", "speaker verification", {
+      width: 1,
+      height: 40
+    });
+</script>
+</html>
