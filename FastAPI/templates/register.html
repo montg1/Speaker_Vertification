@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Half Page</title>
+    <link rel="stylesheet" href="register.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="half-page" style="background-color: #3B919D;">
+            <h2>Left Half Page</h2>
+            <button id="startRecording">Start Recording</button>
+            <button id="stopRecording" disabled>Stop Recording</button>
+            <button id="downloadFiles">Download Files</button>
+            <!-- <canvas class="visualizer" height="60px" width="840"></canvas> -->
+            <script src="register.js"></script>
+        </div>
+
+        <div class="half-page" style="background-color: #FFFFFF;">
+            <h2>Right Half Page</h2>
+            <p>This is the right half of the page content.</p>
+            <button id="doc">
+                <a href='https://speaker-vertification-aqaxjpt3sa-as.a.run.app/'>Doc</a>
+            </button>
+            <div id="recordingsContainer"></div>
+            <p id="recordingCount">Recordings: 0</p>
+        </div>
+    </div>
+
+</body>
+
+</html>
