@@ -18,19 +18,25 @@ app.mount("/templates", StaticFiles(directory="templates"), name="templates")
 
 @app.get("/", response_class=HTMLResponse)
 def get_docs():
-    with open("doc.html", "r") as file:
+    with open("templates/doc.html", "r") as file:
         html_content = file.read()
     return HTMLResponse(content=html_content, status_code=200)
 
 @app.get("/index", response_class=HTMLResponse)
 def get_index():
-    with open("index.html", "r") as file:
+    with open("templates/index.html", "r") as file:
         html_content = file.read()
     return HTMLResponse(content=html_content, status_code=200)
 
 @app.get("/register", response_class=HTMLResponse)
 def get_register():
-    with open("register.html", "r") as file:
+    with open("templates/register.html", "r") as file:
+        html_content = file.read()
+    return HTMLResponse(content=html_content, status_code=200)
+
+@app.get("/verify", response_class=HTMLResponse)
+def get_verify():
+    with open("templates/verify.html", "r") as file:
         html_content = file.read()
     return HTMLResponse(content=html_content, status_code=200)
 
