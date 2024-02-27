@@ -4,18 +4,35 @@ from fastapi import FastAPI , UploadFile, HTTPException, File
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
+from starlette.staticfiles import StaticFiles
 from pathlib import Path
 import os
 import io
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/templates", StaticFiles(directory="templates"), name="templates")
+
 # Serve the doc.html file
-@app.get("/docc", response_class=HTMLResponse)
+
+@app.get("/", response_class=HTMLResponse)
 def get_docs():
     with open("doc.html", "r") as file:
         html_content = file.read()
     return HTMLResponse(content=html_content, status_code=200)
 
+@app.get("/index", response_class=HTMLResponse)
+def get_index():
+    with open("index.html", "r") as file:
+        html_content = file.read()
+    return HTMLResponse(content=html_content, status_code=200)
+
+@app.get("/register", response_class=HTMLResponse)
+def get_register():
+    with open("register.html", "r") as file:
+        html_content = file.read()
+    return HTMLResponse(content=html_content, status_code=200)
 
 # Allow all origins for testing purposes
 app.add_middleware(
@@ -26,54 +43,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 class Item(BaseModel):
     name: str
     price: float
     is_offer: Union[bool, None] = None
-
-
-@app.get("/", response_class=HTMLResponse)
-def get_homepage():
-    html_content = """
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>FastAPI Button</title>
-        <style>
-            body {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                margin: 0;
-                background-color: #f0f0f0;
-            }
-
-            button {
-                padding: 10px 20px;
-                background-color: #4CAF50;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                font-size: 16px;
-                cursor: pointer;
-            }
-
-            button:hover {
-                background-color: #45a049;
-            }
-        </style>
-    </head>
-    <body>
-        <button onclick="window.location.href='/docs'">Go to docs</button>
-    </body>
-    </html>
-    """
-    return HTMLResponse(content=html_content)
-
 
 @app.get("/power/{num1}/{num2}")
 def cal(num1: int, num2: int):
@@ -111,3 +84,25 @@ async def upload_file(file: UploadFile = File(...)):
         return JSONResponse(content={"message": "File uploaded successfully"}, status_code=200)
     except Exception as e:
         return JSONResponse(content={"message": f"Error uploading file: {str(e)}"}, status_code=500)
+    
+
+@app.post("/verify")
+async def verify(file: UploadFile = File(...)):
+    # Load the pre-trained Kaldi model (replace with your model path)
+    model = kaldi_io.ReadUtf8("path/to/your/model")
+
+    try:
+        # Read audio data from the uploaded file
+        file_content = await file.read()
+
+        # Extract features from the audio using Kaldi
+        features = kaldi_io.ReadMat(file_content, is_binary=True)
+
+        # Perform speaker verification using the loaded model
+        # (Replace with your verification logic)
+        verification_result = your_verification_logic(model, features)
+
+        return {"message": verification_result}
+
+    except Exception as e:
+        return {"error": str(e)}
