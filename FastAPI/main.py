@@ -1,38 +1,34 @@
 from typing import Union
-
-from fastapi import FastAPI , UploadFile, HTTPException, File 
+from fastapi import FastAPI , Request, UploadFile, HTTPException, File 
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
 from starlette.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from pathlib import Path
 import os
 import io
 
 app = FastAPI()
 
+templates = Jinja2Templates(directory="templates")
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
-app.mount("/templates", StaticFiles(directory="templates"), name="templates")
 
 # Serve the doc.html file
 
 @app.get("/", response_class=HTMLResponse)
-def get_docs():
-    with open("templates/doc.html", "r") as file:
-        html_content = file.read()
-    return HTMLResponse(content=html_content, status_code=200)
+async def get_doc(request: Request):
+    return templates.TemplateResponse("doc.html", {"request": request})
 
 @app.get("/register", response_class=HTMLResponse)
-def get_register():
-    with open("templates/register.html", "r") as file:
-        html_content = file.read()
-    return HTMLResponse(content=html_content, status_code=200)
+async def get_doc(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})
 
-@app.get("/verify", response_class=HTMLResponse)
-def get_verify():
-    with open("templates/verify.html", "r") as file:
-        html_content = file.read()
-    return HTMLResponse(content=html_content, status_code=200)
+app.get("/verify", response_class=HTMLResponse)
+async def get_doc(request: Request):
+    return templates.TemplateResponse("verify.html", {"request": request})
+
 
 # Allow all origins for testing purposes
 app.add_middleware(
