@@ -92,10 +92,13 @@ const createRecordingButtons = () => {
   }
 };
 
+//examlpe user
+user = 'user1'
+
 const uploadFiles = async () => {
   for (let i = 0; i < recordings.length; i++) {
     const formData = new FormData();
-    formData.append('file', recordings[i], `recording_${i}.wav`);
+    formData.append('file',recordings[i], `recording_${user}_${i}.wav`);
 
     try {
       const response = await fetch('http://127.0.0.1:8000/upload', {

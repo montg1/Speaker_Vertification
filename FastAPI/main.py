@@ -22,12 +22,6 @@ def get_docs():
         html_content = file.read()
     return HTMLResponse(content=html_content, status_code=200)
 
-@app.get("/index", response_class=HTMLResponse)
-def get_index():
-    with open("templates/index.html", "r") as file:
-        html_content = file.read()
-    return HTMLResponse(content=html_content, status_code=200)
-
 @app.get("/register", response_class=HTMLResponse)
 def get_register():
     with open("templates/register.html", "r") as file:
