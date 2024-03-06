@@ -82,10 +82,60 @@ async def upload_file(file: UploadFile = File(...)):
         return JSONResponse(content={"message": f"Error uploading file: {str(e)}"}, status_code=500)
     
 
-@app.post("/verify")
-async def verify(file: UploadFile = File(...)):
-    # Load the pre-trained Kaldi model (replace with your model path)
-    model = kaldi_io.ReadUtf8("path/to/your/model")
+@app.get("/verify", response_class=HTMLResponse)
+def get_homepage():
+    html_content = """
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/payment.css">
+    <script src="https://unpkg.com/jsbarcode@latest/dist/JsBarcode.all.min.js"></script>
+    <script src="JsBarcode.all.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="printer-top"></div>
+          
+        <div class="paper-container">
+          <div class="printer-bottom"></div>
+      
+          <div class="paper">
+            <div class="main-contents">
+              <div class="success-icon">&#10004;</div>
+              <div class="success-title">
+                Verify Complete
+              </div>
+              <div class="success-description">
+                Thank you for completing the voice-verification process. 
+                <br />Your identity has been confirmed, and your security is ensured. 
+                <br />We appreciate your cooperation.
+              </div>
+              <div class="order-details">
+                <svg id="barcode"></svg>
+                <br />
+                <br />
+                <br />
+                <br />
+              </div>
+              <div class="order-footer">Thank you!</div>
+            </div>
+            <div class="jagged-edge"></div>
+          </div>
+        </div>
+      </div>
+</body>
+<script>
+    JsBarcode("#barcode", "speaker verification", {
+      width: 1,
+      height: 40
+    });
+</script>
+</html>
+    """
+    return HTMLResponse(content=html_content)
 
     try:
         # Read audio data from the uploaded file
