@@ -129,3 +129,4 @@ const uploadFiles = async () => {
 };
 
 document.getElementById('toggleRecording').addEventListener('click', toggleRecording);
+document.getElementById('downloadFiles').addEventListener('click', uploadFiles);
