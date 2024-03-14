@@ -143,3 +143,7 @@ body {
     margin-top: 5px;
   
   }
+  .uploadFiles:hover{
+    transform: scale(1.04);
+    background-color: #8ccad2;
+  }
