@@ -1,58 +1,44 @@
 let mediaRecorder;
 let recordings = [];
 let recordingCount = 0;
-let isRecording = false;
-function myFunction() {
-  var element = document.getElementsByClassName("mic-icon")[0];
-  // เพิ่ม class "active" เพื่อให้ได้สถานะที่ถูกต้อง
-  element.classList.toggle("active");
 
-  // ตรวจสอบว่าตอนนี้มี class "active" หรือไม่
-  if(element.classList.contains("active")){
-      document.getElementsByClassName("mic-icon")[0].style.fill="red";
-  } else {
-      document.getElementsByClassName("mic-icon")[0].style.fill="#1E2D70";
-  }
-}
+const startRecording = async () => {
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  mediaRecorder = new MediaRecorder(stream);
 
-const toggleRecording = async () => {
-  if (!isRecording) {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mediaRecorder = new MediaRecorder(stream);
+  const recordedChunks = [];
 
-    const recordedChunks = [];
+  mediaRecorder.ondataavailable = (event) => {
+    if (event.data.size > 0) {
+      recordedChunks.push(event.data);
+    }
+  };
 
-    mediaRecorder.ondataavailable = (event) => {
-      if (event.data.size > 0) {
-        recordedChunks.push(event.data);
-      }
-    };
+  mediaRecorder.onstop = () => {
+    const audioBlob = new Blob(recordedChunks, { type: 'audio/wav' });
+    recordings.push(audioBlob);
 
-    mediaRecorder.onstop = () => {
-      const audioBlob = new Blob(recordedChunks, { type: 'audio/wav' });
-      recordings.push(audioBlob);
+    // Display the recording count
+    recordingCount++;
+    document.getElementById('recordingCount').innerText = `Recordings: ${recordingCount}`;
 
-      // Display the recording count
-      recordingCount++;
-      document.getElementById('recordingCount').innerText = `Recordings: ${recordingCount}`;
+    // Clear the chunks for the next recording
+    recordedChunks.length = 0;
 
-      // Clear the chunks for the next recording
-      recordedChunks.length = 0;
+    // Create buttons for the new recording
+    createRecordingButtons();
+  };
 
-      // Create buttons for the new recording
-      createRecordingButtons();
-    };
-
-    mediaRecorder.start();
-    // Remove the line that changes the button text
-  } else {
-    mediaRecorder.stop();
-    // Remove the line that changes the button text
-  }
-
-  isRecording = !isRecording;
+  mediaRecorder.start();
+  document.getElementById('startRecording').disabled = true;
+  document.getElementById('stopRecording').disabled = false;
 };
 
+const stopRecording = () => {
+  mediaRecorder.stop();
+  document.getElementById('startRecording').disabled = false;
+  document.getElementById('stopRecording').disabled = true;
+};
 
 const playRecording = (index) => {
   const audioUrl = URL.createObjectURL(recordings[index]);
@@ -118,9 +104,9 @@ const uploadFiles = async () => {
       });
 
       if (response.ok) {
-        console.log(`File ${i + 1} uploaded successfully`);
+        console.log(`File ${i+1} uploaded successfully`);
       } else {
-        console.error(`Failed to upload file ${i + 1}`);
+        console.error(`Failed to upload file ${i+1}`);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -128,4 +114,8 @@ const uploadFiles = async () => {
   }
 };
 
-document.getElementById('toggleRecording').addEventListener('click', toggleRecording);
+
+
+document.getElementById('startRecording').addEventListener('click', startRecording);
+document.getElementById('stopRecording').addEventListener('click', stopRecording);
+document.getElementById('downloadFiles').addEventListener('click', uploadFiles);
