@@ -1,5 +1,5 @@
 from typing import Union
-
+import tempfile
 from fastapi import FastAPI , UploadFile, HTTPException, File 
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
@@ -60,3 +60,27 @@ async def upload_file(file: UploadFile = File(...)):
         return JSONResponse(content={"message": "File uploaded successfully"}, status_code=200)
     except Exception as e:
         return JSONResponse(content={"message": f"Error uploading file: {str(e)}"}, status_code=500)
+
+
+# Create a temporary directory for storing audio files
+temp_dir = 'verify_temp'
+
+@app.post("/verify")
+async def verify(audio: UploadFile = File(...)):
+    # Save the audio file to the temporary directory
+    temp_audio_file = os.path.join(temp_dir, audio.filename)
+    with open(temp_audio_file, "wb") as buffer:
+        contents = await audio.read()
+        buffer.write(contents)
+
+    # Process the audio data for speaker verification
+    # ... (Perform speaker verification analysis)
+
+    # Return the result
+    result = { 'verified': True }  # Replace with actual verification logic
+
+    # Delete the temporary audio file
+    os.remove(temp_audio_file)
+
+    return result
+
