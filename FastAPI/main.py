@@ -22,15 +22,15 @@ def get_docs():
         html_content = file.read()
     return HTMLResponse(content=html_content, status_code=200)
 
-@app.get("/index", response_class=HTMLResponse)
+@app.get("/verify", response_class=HTMLResponse)
 def get_index():
-    with open("index.html", "r") as file:
+    with open("templates/verify.html", "r") as file:
         html_content = file.read()
     return HTMLResponse(content=html_content, status_code=200)
 
 @app.get("/register", response_class=HTMLResponse)
 def get_register():
-    with open("register.html", "r") as file:
+    with open("templates/regirter.html", "r") as file:
         html_content = file.read()
     return HTMLResponse(content=html_content, status_code=200)
 
@@ -86,7 +86,7 @@ async def upload_file(file: UploadFile = File(...)):
         return JSONResponse(content={"message": f"Error uploading file: {str(e)}"}, status_code=500)
     
 
-@app.post("/verify")
+@app.post("/verify_01")
 async def verify(file: UploadFile = File(...)):
     # Load the pre-trained Kaldi model (replace with your model path)
     model = kaldi_io.ReadUtf8("path/to/your/model")
@@ -106,3 +106,62 @@ async def verify(file: UploadFile = File(...)):
 
     except Exception as e:
         return {"error": str(e)}
+    
+    
+# Create a temporary directory for storing audio files
+temp_dir = 'verify_temp'
+
+@app.post("/verify_02")
+async def verify(audio: UploadFile = File(...)):
+    # Save the audio file to the temporary directory
+    temp_audio_file = os.path.join(temp_dir, audio.filename)
+    with open(temp_audio_file, "wb") as buffer:
+        contents = await audio.read()
+        buffer.write(contents)
+
+    # Process the audio data for speaker verification
+    # ... (Perform speaker verification analysis)
+
+    # Return the result
+    result = { 'verified': True }  # Replace with actual verification logic
+
+    # Delete the temporary audio file
+    os.remove(temp_audio_file)
+
+    return result
+
+
+@app.post("/verify_Test")
+async def verify(audio: UploadFile = File(...)):
+    # Save the audio file to the temporary directory
+    temp_audio_file = os.path.join(temp_dir, audio.filename)
+    with open(temp_audio_file, "wb") as buffer:
+        contents = await audio.read()
+        buffer.write(contents)
+
+    # Process the audio data for speaker verification
+    # For demonstration purposes, we'll simulate a successful and failed verification scenario
+    if audio.filename == "success.wav":
+        result = {
+            "verified": True,
+            "confidence": 0.92,
+            "message": "Speaker verified successfully",
+            "user_id": 123456,
+            "timestamp": "2023-03-19T14:25:36.789Z",
+            "audio_duration": 5.2
+        }
+    else:
+        result = {
+            "verified": False,
+            "confidence": 0.38,
+            "message": "Speaker verification failed",
+            "user_id": 789012,
+            "timestamp": "2023-03-19T16:18:24.567Z",
+            "audio_duration": 3.1,
+            "error_details": "Voice sample did not match registered speaker"
+        }
+
+    # Delete the temporary audio file
+    os.remove(temp_audio_file)
+
+    return result
