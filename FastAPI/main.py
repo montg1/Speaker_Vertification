@@ -132,16 +132,21 @@ async def verify(audio: UploadFile = File(...)):
 
 
 @app.post("/verify_Test")
-async def verify(audio: UploadFile = File(...)):
-    # Save the audio file to the temporary directory
-    temp_audio_file = os.path.join(temp_dir, audio.filename)
-    with open(temp_audio_file, "wb") as buffer:
-        contents = await audio.read()
-        buffer.write(contents)
+async def upload_file(file: UploadFile = File(...)):
+    try:
+        # Read the content of the uploaded file as bytes
+        file_content = await file.read()
+
+        # Save the content as a .wav file
+        save_path = os.path.join("uploaded_files", file.filename)
+        with open(save_path, "wb") as save_file:
+            save_file.write(file_content)
+    except Exception as e:
+        return JSONResponse(content={"message": f"Error uploading file: {str(e)}"}, status_code=500)
 
     # Process the audio data for speaker verification
     # For demonstration purposes, we'll simulate a successful and failed verification scenario
-    if audio.filename == "success.wav":
+    if file.filename == "success.wav":
         result = {
             "verified": True,
             "confidence": 0.92,
@@ -162,6 +167,6 @@ async def verify(audio: UploadFile = File(...)):
         }
 
     # Delete the temporary audio file
-    os.remove(temp_audio_file)
+    os.remove(save_path)
 
     return result
