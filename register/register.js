@@ -94,6 +94,8 @@ const createRecordingButtons = () => {
 
     const deleteButton = document.createElement('button');
     deleteButton.innerText = 'Delete';
+    //add class delete
+    deleteButton.classList.add('delete');
     deleteButton.addEventListener('click', () => deleteRecording(i));
 
     // Append elements to the recording div
